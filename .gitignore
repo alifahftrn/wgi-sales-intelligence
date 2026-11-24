@@ -1,0 +1,37 @@
+
+# Environment dan credentials
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local data dan hasil ETL
+.local/
+*.sqlite3
+*.sqlite3-journal
+*.log
+
+# Backup
+*_backup*/
+backups/
+*.bak
+
+# Frontend
+node_modules/
+dist/
+
+# Django
+staticfiles/
+media/
+
+# Editor dan OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

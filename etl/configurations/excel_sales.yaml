@@ -1,0 +1,7 @@
+# Explicit source schema for a demonstration product dataset, not Sage mapping.
+sheet: Produk
+name: produk
+columns:
+  - Product Code
+  - Product Name
+  - Volume per Carton
