@@ -1,4 +1,7 @@
-"""Local development only: no authentication has been configured yet."""
+"""Local admin ETL monitoring; reads operational summaries."""
+import sqlite3
+from datetime import datetime
+from .manual_jobs import Journal, ACTIVE
 from django.conf import settings
 from django.db import connections, transaction, DatabaseError
 from django.http import HttpResponseForbidden
@@ -27,6 +30,21 @@ def etl_monitor(request):
         attempts = scheduler_attempts(settings.EXTRACT_ROOT.parent / 'scheduler_logs')
     except OSError:
         scheduler_error = True
+    manual_error = False
+    manual_jobs = []
+    pipeline_busy = True
+    try:
+        root = settings.EXTRACT_ROOT.parent
+        manual_jobs = Journal(root).history()
+        pipeline_busy = (root / '.pipeline.lock').exists() or any(j['status'] in ACTIVE for j in manual_jobs)
+        for job in manual_jobs:
+            for key in ('created', 'started', 'finished'):
+                if job[key]:
+                    job[key] = datetime.fromisoformat(job[key])
+    except (OSError, sqlite3.Error, ValueError):
+        manual_error = True
+        pipeline_busy = True
     return render(request, 'etl_monitor_v1.html', dict(history=history, latest_fact=latest_fact,
                   attempts=attempts, latest=attempts[0] if attempts else None,
-                  database_error=database_error, scheduler_error=scheduler_error))
+                  database_error=database_error, scheduler_error=scheduler_error,
+                  manual_jobs=manual_jobs, manual_error=manual_error, pipeline_busy=pipeline_busy))

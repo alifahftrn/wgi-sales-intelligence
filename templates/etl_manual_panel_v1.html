@@ -1,0 +1,17 @@
+<section class="panel" id="manual-etl">
+<h2>Manual ETL — ADMIN</h2>
+<p>Preview tidak menulis ke data mart; Apply membuat snapshot baru dan menjalankan load. Keduanya dapat menghasilkan file staging lokal. Klik Refresh untuk melihat status.</p>
+{% if manual_error %}<div class="alert">Riwayat manual tidak dapat dibaca. Trigger dinonaktifkan sampai diperiksa.</div>{% endif %}
+{% if pipeline_busy %}<div class="note">ETL aktif atau lock tertinggal. Jangan jalankan lagi sebelum diperiksa.</div>{% endif %}
+<form method="post" action="{% url 'etl_manual_run_v1' %}">{% csrf_token %}
+<button type="submit" name="mode" value="PREVIEW" {% if pipeline_busy %}disabled{% endif %}>Run Preview</button>
+</form>
+<form method="post" action="{% url 'etl_manual_run_v1' %}">{% csrf_token %}
+<p><label><input type="checkbox" name="confirm_apply" value="yes" required {% if pipeline_busy %}disabled{% endif %}> Saya mengonfirmasi pembaruan data mart</label></p>
+<button type="submit" name="mode" value="APPLY" {% if pipeline_busy %}disabled{% endif %}>Run Apply</button>
+</form>
+<p>FAILED / INTERRUPTED tidak membuktikan rollback. Periksa etl_log sebelum retry. PENDING / RUNNING tanpa perkembangan perlu diperiksa operator, tidak otomatis diulang.</p>
+<div class="scroll"><table><thead><tr><th>Permintaan (WIB)</th><th>Job ID / Admin ID</th><th>Mode</th><th>Status</th><th>Tahap / PID</th><th>Run ID / Hasil</th><th>Selesai (WIB)</th></tr></thead><tbody>
+{% for j in manual_jobs %}<tr><td>{{ j.created|date:'d M Y H:i:s' }}</td><td><code>{{ j.job_id }}</code> / {{ j.actor_id }}</td><td>{{ j.mode }}</td><td class="{{ j.status|lower }}">{{ j.status }}{% if j.reason %}<br>{{ j.reason }}{% endif %}</td><td>{{ j.stage|default_if_none:'—' }} / {{ j.worker_pid|default_if_none:'—' }}</td><td><code>{{ j.run_id|default_if_none:'—' }}</code><br>{{ j.outcome|default_if_none:'—' }}</td><td>{{ j.finished|date:'d M Y H:i:s'|default:'—' }}</td></tr>{% empty %}<tr><td colspan="7">Belum ada percobaan manual.</td></tr>{% endfor %}
+</tbody></table></div>
+</section>

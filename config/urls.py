@@ -13,3 +13,7 @@ from django.urls import include
 urlpatterns += [
     path("accounts/", include("accounts.urls")),
 ]
+
+from etl.manual_views import trigger_manual_etl
+
+urlpatterns += [path("etl/manual/run/", trigger_manual_etl, name="etl_manual_run_v1")]
