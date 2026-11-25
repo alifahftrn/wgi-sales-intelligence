@@ -1,0 +1,20 @@
+version: 1
+profiles:
+  mysql:
+    source_system: MYSQL
+    fields:
+      kode_produk: kodeProduk
+      kode_apc_lama: kodeAPCLama
+      nama_produk: namaProduk
+      brand: brand
+      jenis_produk: jenisProduk
+      segment: segment
+      kemasan_liter: kemasanProduk
+      isi_karton: isiKarton
+      liter_per_karton: volumeTotal
+  excel:
+    source_system: EXCEL
+    fields:
+      kode_produk: Product Code
+      nama_produk: Product Name
+      liter_per_karton: Volume per Carton
