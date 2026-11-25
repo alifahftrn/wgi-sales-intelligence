@@ -75,10 +75,11 @@ def plan_table(kind,incoming,existing,cutoff):
     return changes
 
 
-def execute(cursor,prepared,apply=False):
+def execute(cursor,prepared,apply=False,*,test_only=False):
     """Caller must own a transaction on datamart; SQL identifiers are static."""
     cursor.execute('SELECT current_database()')
-    if cursor.fetchone()[0]!='sales_datamart': raise ValueError('database tujuan bukan sales_datamart')
+    expected = 'sales_datamart_scd_test' if test_only else 'sales_datamart'
+    if cursor.fetchone()[0] != expected: raise ValueError(f'database tujuan bukan {expected}')
     # Serialize this loader and prevent concurrent modifications while planning.
     cursor.execute('SET LOCAL lock_timeout = \'5s\'')
     cursor.execute('LOCK TABLE public.dim_produk, public.dim_distributor, public.etl_log IN SHARE ROW EXCLUSIVE MODE')
