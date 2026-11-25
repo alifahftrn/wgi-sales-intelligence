@@ -7,3 +7,9 @@ from etl.monitoring_views import etl_monitor
 urlpatterns += [
     path("etl/monitoring/", etl_monitor, name="etl_monitor_v1"),
 ]
+
+from django.urls import include
+
+urlpatterns += [
+    path("accounts/", include("accounts.urls")),
+]

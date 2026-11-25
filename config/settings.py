@@ -27,3 +27,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EXTRACT_ROOT = BASE_DIR / ".local" / "extracts"
 EXTRACT_BATCH_SIZE = int(os.getenv("EXTRACT_BATCH_SIZE", "1000"))
+
+from accounts.settings import configure as configure_accounts
+
+configure_accounts(globals())
