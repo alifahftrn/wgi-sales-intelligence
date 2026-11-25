@@ -2,7 +2,7 @@
 from contextlib import contextmanager
 from .base import BaseAdapter, Dataset
 from ..errors import ExtractError
-from ..schema import BASE, OPTIONAL_COLUMNS, HISTORY
+from ..schema import BASE, OPTIONAL_COLUMNS
 
 def q(name):
     # Only call with identifiers from our static allowlist.
@@ -16,10 +16,7 @@ def discover(cursor):
     for table, col, datatype in cursor.fetchall():
         metadata.setdefault(table, {})[col] = datatype
     plan, warnings = {}, []
-    for table, required in {**BASE, **HISTORY}.items():
-        if table not in engines and table in HISTORY:
-            warnings.append(f"Tabel histori belum ada: {table}")
-            continue
+    for table, required in BASE.items():
         if table not in engines or str(engines[table]).lower() != "innodb":
             raise ExtractError(f"Tabel {table} tidak tersedia atau bukan InnoDB.")
         types = metadata.get(table, {})
@@ -30,7 +27,7 @@ def discover(cursor):
         columns = required + [c for c in optional if c in types and c not in required]
         absent = [c for c in optional if c not in types]
         if absent:
-            warnings.append(f"Kolom V3 belum ada pada {table}: {', '.join(absent)}")
+            warnings.append(f"Kolom skema 14 tabel belum ada pada {table}: {', '.join(absent)}")
         plan[table] = (columns, {c: types[c] for c in columns})
     return plan, warnings
 

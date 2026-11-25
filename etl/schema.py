@@ -1,5 +1,6 @@
-# Explicit allowlist from salesdashboard (2).sql and migration 02 V3.
-# No SELECT *, no user credentials or author identifiers.
+# MySQL salesdashboard: 14 tables, 13 ETL datasets.
+# No SELECT *, user credentials, or author identifiers.
+# Master/outstanding history is captured downstream in PostgreSQL.
 BASE = {'asp': ['idASP', 'tahun', 'jenisTarget', 'kodeDistributor', 'tanggalInput', 'keterangan'],
  'asp_detail': ['idASPDetail',
                 'idASP',
@@ -55,16 +56,15 @@ BASE = {'asp': ['idASP', 'tahun', 'jenisTarget', 'kodeDistributor', 'tanggalInpu
                             'revisiPack',
                             'revisiLiter',
                             'revisiRupiah']}
+
+# Read legacy schemas with explicit warnings; do not invent absent values.
 OPTIONAL_COLUMNS = {'asp': ['updated_at'],
- 'asp_detail': ['updated_at', 'waktuPenetapan', 'idVersiProduk', 'idVersiDistributor'],
+ 'asp_detail': ['updated_at', 'waktuPenetapan'],
  'delivery_order': ['updated_at'],
- 'delivery_order_detail': ['updated_at',
-                           'literPerPackSaatDO',
-                           'idVersiProduk',
-                           'idVersiDistributor'],
+ 'delivery_order_detail': ['updated_at', 'literPerPackSaatDO'],
  'distributor': ['updated_at'],
  'forecast': ['updated_at'],
- 'forecast_detail': ['updated_at', 'idVersiProduk', 'idVersiDistributor'],
+ 'forecast_detail': ['updated_at'],
  'harga_produk': ['updated_at'],
  'produk': ['updated_at'],
  'purchase_order': ['updated_at'],
@@ -73,31 +73,6 @@ OPTIONAL_COLUMNS = {'asp': ['updated_at'],
                            'hargaDasarPackSaatPO',
                            'tarifPPNSaatPO',
                            'hargaPackSetelahPPN',
-                           'qtyBatalPack',
-                           'idVersiProduk',
-                           'idVersiDistributor'],
+                           'qtyBatalPack'],
  'revisi_forecast': ['updated_at'],
- 'revisi_forecast_detail': ['updated_at', 'idVersiProduk', 'idVersiDistributor']}
-HISTORY = {'riwayat_master_produk': ['idVersiProduk',
-                           'kodeProduk',
-                           'kodeAPCLama',
-                           'namaProduk',
-                           'kemasanProduk',
-                           'isiKarton',
-                           'volumeTotal',
-                           'jenisProduk',
-                           'brand',
-                           'segment',
-                           'berlakuMulai',
-                           'berlakuSampai',
-                           'updated_at'],
- 'riwayat_master_distributor': ['idVersiDistributor',
-                                'kodeDistributor',
-                                'namaDistributor',
-                                'area',
-                                'region',
-                                'wilayah',
-                                'berlakuMulai',
-                                'berlakuSampai',
-                                'updated_at'],
- 'riwayat_outstanding': ['idRiwayat', 'idPO', 'waktuPerubahan', 'alasan', 'keterangan']}
+ 'revisi_forecast_detail': ['updated_at']}
