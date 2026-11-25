@@ -114,9 +114,10 @@ def check_calendar(plan,calendar):
                 if k in r and date.fromisoformat(r[k]) not in calendar: raise ValueError('tanggal di luar dim_tanggal')
 
 
-def inspect(cursor,p):
+def inspect(cursor,p,*,test_only=False):
     cursor.execute('SELECT current_database()')
-    if cursor.fetchone()[0]!='sales_datamart': raise ValueError('database tujuan bukan sales_datamart')
+    expected = 'sales_datamart_scd_test' if test_only else 'sales_datamart'
+    if cursor.fetchone()[0]!=expected: raise ValueError(f'database tujuan bukan {expected}')
     ref=f'canonical_v2/mysql/{p["run_id"]}#sha256={p["digest"]}'
     cursor.execute('SELECT status, extract_ref, cutoff_at FROM public.etl_log WHERE run_key=%s',(PREFIX+p['run_id'],))
     if cursor.fetchone()!=('PARTIAL',ref,p['cutoff']): raise ValueError('load dimensi untuk run ini belum cocok')
