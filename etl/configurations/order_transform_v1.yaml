@@ -1,0 +1,5 @@
+version: 1
+source_system: MYSQL
+po_statuses: [OPEN, PARTIAL, COMPLETED, CANCELLED]
+do_statuses: [CONFIRMED, CANCELLED]
+steps: [validate_orders, join_orders, aggregate_actual]
