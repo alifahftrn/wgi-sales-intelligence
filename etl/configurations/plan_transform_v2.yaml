@@ -1,0 +1,5 @@
+version: 2
+source_system: MYSQL
+source_business_timezone: Asia/Jakarta
+forecast_selection: latest_timestamp_then_revision_then_source_id
+steps: [order_preview, plan_history, monthly_metrics, monthly_growth]
