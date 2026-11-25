@@ -1,0 +1,570 @@
+version: 2
+source_system: MYSQL
+datasets:
+  asp:
+    primary_key: idASP
+    fields:
+      idASP:
+        name: id_asp
+        nullable: false
+        type: code
+      tahun:
+        name: tahun
+        nullable: false
+        type: integer
+        min: 1
+        max: 9999
+      jenisTarget:
+        name: jenis_target
+        nullable: false
+        type: enum
+        values:
+        - Internal
+        - External
+      kodeDistributor:
+        name: kode_distributor
+        nullable: false
+        type: code
+      tanggalInput:
+        name: tanggal_input
+        nullable: false
+        type: local_datetime
+      keterangan:
+        name: keterangan
+        nullable: true
+        type: text
+        limit: 255
+        allow_empty: true
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  asp_detail:
+    primary_key: idASPDetail
+    fields:
+      idASPDetail:
+        name: id_asp_detail
+        nullable: false
+        type: code
+      idASP:
+        name: id_asp
+        nullable: false
+        type: code
+      bulan:
+        name: bulan
+        nullable: false
+        type: integer
+        min: 1
+        max: 12
+      kodeProduk:
+        name: kode_produk
+        nullable: false
+        type: code
+      targetPack:
+        name: target_pack
+        nullable: true
+        type: integer
+        min: 0
+        max: 9223372036854775807
+      targetLiter:
+        name: target_liter
+        nullable: true
+        type: decimal
+        precision: 16
+        scale: 3
+        positive: false
+      targetRupiah:
+        name: target_rupiah
+        nullable: true
+        type: decimal
+        precision: 18
+        scale: 2
+        positive: false
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+      waktuPenetapan:
+        name: waktu_penetapan
+        nullable: true
+        type: local_datetime
+  delivery_order:
+    primary_key: idDO
+    fields:
+      idDO:
+        name: id_do
+        nullable: false
+        type: code
+      noDO:
+        name: no_do
+        nullable: false
+        type: text
+        limit: 40
+        allow_empty: false
+      tanggalDO:
+        name: tanggal_do
+        nullable: false
+        type: date
+      idPO:
+        name: id_po
+        nullable: false
+        type: code
+      statusDO:
+        name: status_do
+        nullable: true
+        type: text
+        limit: 20
+        allow_empty: true
+      keterangan:
+        name: keterangan
+        nullable: true
+        type: text
+        limit: 255
+        allow_empty: true
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  delivery_order_detail:
+    primary_key: idDODetail
+    fields:
+      idDODetail:
+        name: id_do_detail
+        nullable: false
+        type: code
+      idDO:
+        name: id_do
+        nullable: false
+        type: code
+      nomorBaris:
+        name: nomor_baris
+        nullable: false
+        type: integer
+        min: 1
+        max: 2147483647
+      idPODetail:
+        name: id_po_detail
+        nullable: false
+        type: code
+      qtyPack:
+        name: qty_pack
+        nullable: false
+        type: integer
+        min: 1
+        max: 9223372036854775807
+      keterangan:
+        name: keterangan
+        nullable: true
+        type: text
+        limit: 255
+        allow_empty: true
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+      literPerPackSaatDO:
+        name: liter_per_pack_saat_do
+        nullable: true
+        type: decimal
+        precision: 12
+        scale: 3
+        positive: true
+  distributor:
+    primary_key: kodeDistributor
+    fields:
+      kodeDistributor:
+        name: kode_distributor
+        nullable: false
+        type: code
+      namaDistributor:
+        name: nama_distributor
+        nullable: false
+        type: text
+        limit: 120
+        allow_empty: false
+      area:
+        name: area
+        nullable: false
+        type: enum
+        values:
+        - Jawa
+        - Luar Jawa
+      region:
+        name: region
+        nullable: false
+        type: enum
+        values:
+        - Region 1
+        - Region 2
+        - Region 3
+        - Region 4
+        - Region 5
+        - Region 6
+        - Region 7
+      wilayah:
+        name: wilayah
+        nullable: false
+        type: text
+        limit: 80
+        allow_empty: false
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  forecast:
+    primary_key: idForecast
+    fields:
+      idForecast:
+        name: id_forecast
+        nullable: false
+        type: code
+      bulanForecast:
+        name: bulan_forecast
+        nullable: false
+        type: date
+      kodeDistributor:
+        name: kode_distributor
+        nullable: false
+        type: code
+      tanggalInput:
+        name: tanggal_input
+        nullable: false
+        type: local_datetime
+      keterangan:
+        name: keterangan
+        nullable: true
+        type: text
+        limit: 255
+        allow_empty: true
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  forecast_detail:
+    primary_key: idForecastDetail
+    fields:
+      idForecastDetail:
+        name: id_forecast_detail
+        nullable: false
+        type: code
+      idForecast:
+        name: id_forecast
+        nullable: false
+        type: code
+      kodeProduk:
+        name: kode_produk
+        nullable: false
+        type: code
+      forecastPack:
+        name: forecast_pack
+        nullable: false
+        type: integer
+        min: 0
+        max: 9223372036854775807
+      forecastLiter:
+        name: forecast_liter
+        nullable: false
+        type: decimal
+        precision: 16
+        scale: 3
+        positive: false
+      forecastRupiah:
+        name: forecast_rupiah
+        nullable: false
+        type: decimal
+        precision: 18
+        scale: 2
+        positive: false
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  harga_produk:
+    primary_key: idHarga
+    fields:
+      idHarga:
+        name: id_harga
+        nullable: false
+        type: code
+      kodeProduk:
+        name: kode_produk
+        nullable: false
+        type: code
+      areaHarga:
+        name: area_harga
+        nullable: true
+        type: text
+        limit: 80
+        allow_empty: true
+      berlakuMulai:
+        name: berlaku_mulai
+        nullable: true
+        type: date
+      hargaBotolSebelumPPN:
+        name: harga_botol_sebelum_ppn
+        nullable: true
+        type: decimal
+        precision: 18
+        scale: 2
+        positive: false
+      hargaBoxSebelumPPN:
+        name: harga_box_sebelum_ppn
+        nullable: true
+        type: decimal
+        precision: 18
+        scale: 2
+        positive: false
+      hargaLiterSebelumPPN:
+        name: harga_liter_sebelum_ppn
+        nullable: true
+        type: decimal
+        precision: 18
+        scale: 4
+        positive: false
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  produk:
+    primary_key: kodeProduk
+    fields:
+      kodeProduk:
+        name: kode_produk
+        nullable: false
+        type: code
+      kodeAPCLama:
+        name: kode_apc_lama
+        nullable: true
+        type: code
+      namaProduk:
+        name: nama_produk
+        nullable: false
+        type: text
+        limit: 150
+        allow_empty: false
+      kemasanProduk:
+        name: kemasan_liter
+        nullable: false
+        type: decimal
+        precision: 10
+        scale: 3
+        positive: true
+      isiKarton:
+        name: isi_karton
+        nullable: false
+        type: integer
+        min: 1
+        max: 2147483647
+      volumeTotal:
+        name: liter_per_karton
+        nullable: false
+        type: decimal
+        precision: 12
+        scale: 3
+        positive: true
+      jenisProduk:
+        name: jenis_produk
+        nullable: false
+        type: enum
+        values:
+        - 2W
+        - 4W
+      brand:
+        name: brand
+        nullable: false
+        type: text
+        limit: 50
+        allow_empty: false
+      segment:
+        name: segment
+        nullable: false
+        type: enum
+        values:
+        - Top
+        - Mid
+        - Low
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  purchase_order:
+    primary_key: idPO
+    fields:
+      idPO:
+        name: id_po
+        nullable: false
+        type: code
+      noPO:
+        name: no_po
+        nullable: false
+        type: text
+        limit: 40
+        allow_empty: false
+      tanggalPO:
+        name: tanggal_po
+        nullable: false
+        type: date
+      kodeDistributor:
+        name: kode_distributor
+        nullable: false
+        type: code
+      statusPO:
+        name: status_po
+        nullable: true
+        type: text
+        limit: 20
+        allow_empty: true
+      keterangan:
+        name: keterangan
+        nullable: true
+        type: text
+        limit: 255
+        allow_empty: true
+      alasanTidakTerkirim:
+        name: alasan_tidak_terkirim
+        nullable: true
+        type: enum
+        values:
+        - Stock
+        - Tonase
+        - AR
+        - Payment
+        - Armada
+      keteranganOutstanding:
+        name: keterangan_outstanding
+        nullable: true
+        type: text
+        limit: 255
+        allow_empty: true
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  purchase_order_detail:
+    primary_key: idPODetail
+    fields:
+      idPODetail:
+        name: id_po_detail
+        nullable: false
+        type: code
+      idPO:
+        name: id_po
+        nullable: false
+        type: code
+      kodeProduk:
+        name: kode_produk
+        nullable: false
+        type: code
+      idHarga:
+        name: id_harga
+        nullable: false
+        type: code
+      qtyPack:
+        name: qty_pack
+        nullable: false
+        type: integer
+        min: 1
+        max: 9223372036854775807
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+      literPerPackSaatPO:
+        name: liter_per_pack_saat_po
+        nullable: true
+        type: decimal
+        precision: 12
+        scale: 3
+        positive: true
+      hargaDasarPackSaatPO:
+        name: harga_dasar_pack_saat_po
+        nullable: true
+        type: decimal
+        precision: 18
+        scale: 2
+        positive: false
+      tarifPPNSaatPO:
+        name: tarif_ppn_saat_po
+        nullable: true
+        type: decimal
+        precision: 7
+        scale: 6
+        positive: false
+        max: '1'
+      hargaPackSetelahPPN:
+        name: harga_pack_setelah_ppn
+        nullable: true
+        type: decimal
+        precision: 22
+        scale: 2
+        positive: false
+      qtyBatalPack:
+        name: qty_batal_pack
+        nullable: true
+        type: integer
+        min: 0
+        max: 9223372036854775807
+  revisi_forecast:
+    primary_key: idRevisi
+    fields:
+      idRevisi:
+        name: id_revisi
+        nullable: false
+        type: code
+      idForecast:
+        name: id_forecast
+        nullable: false
+        type: code
+      mingguKe:
+        name: minggu_ke
+        nullable: false
+        type: integer
+        min: 1
+        max: 2147483647
+      tanggalRevisi:
+        name: tanggal_revisi
+        nullable: false
+        type: local_datetime
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
+  revisi_forecast_detail:
+    primary_key: idRevisiDetail
+    fields:
+      idRevisiDetail:
+        name: id_revisi_detail
+        nullable: false
+        type: code
+      idRevisi:
+        name: id_revisi
+        nullable: false
+        type: code
+      kodeProduk:
+        name: kode_produk
+        nullable: false
+        type: code
+      revisiPack:
+        name: revisi_pack
+        nullable: true
+        type: integer
+        min: 0
+        max: 9223372036854775807
+      revisiLiter:
+        name: revisi_liter
+        nullable: true
+        type: decimal
+        precision: 16
+        scale: 3
+        positive: false
+      revisiRupiah:
+        name: revisi_rupiah
+        nullable: true
+        type: decimal
+        precision: 18
+        scale: 2
+        positive: false
+      updated_at:
+        name: source_updated_at
+        nullable: false
+        type: utc_timestamp
