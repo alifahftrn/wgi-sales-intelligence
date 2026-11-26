@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_safe
 from django.views.decorators.cache import never_cache
 from .monitoring import read_database, scheduler_attempts
+from .scheduler_views import scheduler_context
 
 
 @never_cache
@@ -44,7 +45,8 @@ def etl_monitor(request):
     except (OSError, sqlite3.Error, ValueError):
         manual_error = True
         pipeline_busy = True
+    v2 = scheduler_context(settings.EXTRACT_ROOT.parent)
     return render(request, 'etl_monitor_v1.html', dict(history=history, latest_fact=latest_fact,
                   attempts=attempts, latest=attempts[0] if attempts else None,
                   database_error=database_error, scheduler_error=scheduler_error,
-                  manual_jobs=manual_jobs, manual_error=manual_error, pipeline_busy=pipeline_busy))
+                  manual_jobs=manual_jobs, manual_error=manual_error, pipeline_busy=pipeline_busy, **v2))

@@ -1,0 +1,19 @@
+{% load static %}<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ETL Scheduler Settings</title><link rel="stylesheet" href="{% static 'css/etl_monitor_v1.css' %}"></head>
+<body><header><div class="brand">WGI <span>Sales Intelligence</span></div><div class="muted">SYSTEM / SCHEDULER V2 · ADMIN</div></header>
+<main><section class="heading"><div><div class="eyebrow">ETL · DEVELOPMENT</div><h1>Pengaturan Scheduler V2</h1><p>Atur jadwal ETL harian (WIB).</p></div><a class="button" href="{% url 'etl_monitor_v1' %}">ETL Monitoring</a></section>
+<section class="panel"><h2>Konfigurasi jadwal</h2>
+{% if form_error %}<div class="alert" role="alert">{{ form_error }}</div>{% endif %}
+{% if v2_error %}<div class="alert">Konfigurasi tidak dapat dibaca. Penyimpanan dinonaktifkan.</div>{% else %}
+<form method="post" action="{% url 'etl_scheduler_settings_v1' %}">{% csrf_token %}
+<p><label for="enabled">Status jadwal</label><br><select id="enabled" name="enabled" required><option value="0" {% if not v2_config.enabled %}selected{% endif %}>Nonaktif</option><option value="1" {% if v2_config.enabled %}selected{% endif %}>Aktif</option></select></p>
+<p><label for="clock">Jam harian (WIB)</label><br><input id="clock" name="clock" type="time" step="60" required value="{{ v2_config.clock }}"></p>
+<p><label for="mode">Mode ETL</label><br><select id="mode" name="mode" required><option value="PREVIEW" {% if v2_config.mode == 'PREVIEW' %}selected{% endif %}>PREVIEW — tanpa load data mart</option><option value="APPLY" {% if v2_config.mode == 'APPLY' %}selected{% endif %}>APPLY — memperbarui data mart</option></select></p>
+<p><label><input type="checkbox" name="confirm_legacy_disabled" value="yes"> Saya telah memastikan Windows Task Scheduler lama nonaktif (wajib jika mengaktifkan jadwal).</label></p>
+<p><label><input type="checkbox" name="confirm_apply" value="yes"> Saya mengonfirmasi eksekusi APPLY otomatis (wajib jika mengaktifkan mode APPLY).</label></p>
+<button type="submit">Simpan konfigurasi</button>
+</form>
+<p>Form ini hanya menyimpan konfigurasi. Tidak menyalakan worker, tidak menghentikan ETL yang sudah berjalan, dan tidak menjalankan ETL langsung. Konfirmasi scheduler lama adalah pemeriksaan operator, bukan pemeriksaan otomatis Windows.</p>
+{% endif %}</section>
+{% include 'etl_scheduler_status_v1.html' %}
+<footer>Scheduler Management V1 · Development lokal.</footer></main></body></html>

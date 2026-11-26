@@ -1,0 +1,18 @@
+{% load tz %}
+{% timezone 'Asia/Jakarta' %}
+<section class="panel" id="scheduler-v2">
+<h2>Scheduler V2 — jadwal otomatis</h2>
+<p><a href="{% url 'etl_scheduler_settings_v1' %}">Pengaturan Scheduler V2</a></p>
+{% if v2_error %}
+<div class="alert">Konfigurasi atau riwayat Scheduler V2 tidak dapat dibaca.</div>
+{% else %}
+<p><b>Konfigurasi:</b> {% if v2_config.enabled %}Aktif{% else %}Nonaktif{% endif %} · {{ v2_config.clock }} WIB setiap hari · {{ v2_config.mode }}</p>
+<p>Terakhir diubah: {{ v2_config.updated|date:'d M Y H:i:s'|default:'Belum ada' }} WIB.</p>
+<p>Aktif berarti jadwal diizinkan, bukan bukti proses scheduler hidup. Worker harus dijalankan terpisah dengan <code>python manage.py etl_scheduler run</code>. Status hidup worker belum dipantau.</p>
+<div class="scroll"><table><thead><tr><th>Tanggal jadwal (WIB)</th><th>Jam / mode</th><th>Status</th><th>Mulai / selesai (WIB)</th><th>Tahap</th><th>Run ID / hasil</th></tr></thead><tbody>
+{% for job in v2_jobs %}<tr><td>{{ job.job_id }}</td><td>{{ job.clock }} / {{ job.mode }}</td><td class="{{ job.status|lower }}">{{ job.status }}{% if job.reason %}<br>{{ job.reason }}{% endif %}</td><td>{{ job.started|date:'d M Y H:i:s' }}<br>{{ job.finished|date:'d M Y H:i:s'|default:'—' }}</td><td>{{ job.stage|default_if_none:'—' }}</td><td><code>{{ job.run_id|default_if_none:'—' }}</code><br>{{ job.outcome|default_if_none:'—' }}</td></tr>{% empty %}<tr><td colspan="6">Belum ada percobaan terjadwal V2.</td></tr>{% endfor %}
+</tbody></table></div>
+<p>Satu percobaan terjadwal per tanggal WIB. Perubahan jam atau mode tidak mengulang jadwal yang sudah diklaim. Untuk RUNNING tanpa perkembangan, periksa proses dan lock sebelum recovery melalui terminal.</p>
+{% endif %}
+</section>
+{% endtimezone %}

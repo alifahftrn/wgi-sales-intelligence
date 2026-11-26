@@ -17,3 +17,7 @@ urlpatterns += [
 from etl.manual_views import trigger_manual_etl
 
 urlpatterns += [path("etl/manual/run/", trigger_manual_etl, name="etl_manual_run_v1")]
+
+from etl.scheduler_views import scheduler_settings
+
+urlpatterns += [path("etl/scheduler/", scheduler_settings, name="etl_scheduler_settings_v1")]
